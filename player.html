@@ -1,0 +1,143 @@
+<html>
+    <head>
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+        <title>Player</title>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id='player_wrapper'>
+                <video id='video_player'>
+                    <source src='video.mp4' type='video/mp4'>
+                </video>
+                <div id='player_controls'>
+                    <input type="image" src="play.png" onclick="play_vid()" id="play_button">
+                    <input type="image" src="pause.png" onclick="pause_vid()" id="pause_button">
+                    <input type="image" src="stop.png" onclick="stop_vid()" id="stop_button">
+                    <img src="volume.png" id="vol_img" onclick="mute()">
+                    <img src="fullscreen.png" id="fullscreen" onclick="fullscreen()">
+                    <input type="range" id="change_vol" class="slider" onchange="change_vol()" step="0.05" min="0" max="1" value="1">
+                    <progress id="progress-bar" min='0' max="100" value="0" onplaying="bar()">0% played</progress>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){startplayer();}, false);
+            var player;
+
+            function startplayer(){
+                player = document.getElementById('video_player');
+                player.controls = false;
+                player.addEventListener('timeupdate',updateProgressBar, false);
+            function updateProgressBar(){
+                var progressBar = document.getElementById('progress-bar');
+                var percentage = Math.floor((100 / player.duration)* player.currentTime);
+                progressBar.value = percentage;
+                progressBar.innerHTML = percentage + '% played';
+            }
+            }
+            function mute(){
+                player.volume = 0;
+            }
+            function fullscreen(){
+                if(player.requestFullscreen){
+                    player.requestFullscreen();
+                }else if(player.mozRequestFullScreen){
+                    player.mozRequestFullScreen();
+                }else if (player.webkitRequestFullscreen){
+                    player.webkitRequestFullscreen();
+                }else if(player.msRequestFullscreen){
+                    player.msRequestFullscreen();
+                }
+            }
+            function play_vid(){
+                player.play();
+            }
+            function pause_vid(){
+                player.pause();
+            }
+            function stop_vid(){
+                player.pause();
+                player.currentTime = 0;
+            }
+            function change_vol(){
+                player.volume= document.getElementById("change_vol").value;
+            }
+        </script>
+        <style>
+            body{
+                width: 100%;
+                margin: 0 auto;
+                padding: 0px;
+                font-family: Helvetica;
+                background-color: transparent;
+            }
+            #wrapper{
+                text-align: right;
+                margin: 0 auto;
+                padding: 15px;
+                width: 1000px;
+            }
+            #player_wrapper{
+                position: relative;
+                width: 900px;
+                text-align: center;
+                margin-left: auto;
+            }
+            #video_player{
+                width: 900px;
+            }
+            #player_controls{
+                top: 98%;
+                position: absolute;
+                background-color: black;
+                
+                width: 100%;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+            #fullscreen{
+                float: left;
+                width: 25px; 
+                transform: translateX(675px);   
+            }
+            input[type="image"]{
+                float: left;
+                height: 20px;
+                margin-left: 2px;
+                margin-right: 5px;
+                /* margin-top: 2px; */
+            }
+            
+            #vol_img{
+                /* margin-bottom: 4px; */
+                transform: translateY(-4px);
+                margin-left: 670px;
+                width: 25px;
+            }
+            .slider:hover{
+                opacity: 0.95;
+            }
+            
+            .slider{
+                transition: .4s;
+                opacity: 0.65;
+                border-radius: 6px;
+            }
+            #progress-bar{
+                margin-right: 50px;
+                transform: translateY(-18px);
+                height: 6px;
+                width: 485px;
+                background-color: gray;
+            }
+            #change_vol{
+                border-radius: 10px;
+                background: black;
+                margin-bottom: 4px;
+                width: 50px;
+            }
+        </style>
+    </body>
+</html>
